@@ -26,10 +26,10 @@ export class HomePage {
   async initDatabase() {
     try {
       // Inicializa todas las colecciones de tipos de Pokémon en la base de datos con el estado "false"
-      const collections = ['Tipo', 'Tipo2', 'Tipo3', 'Tipo4', 'Tipo5', 'Tipo6', 'Tipo7', 'Tipo8', 'Tipo9', 'Tipo10', 'Tipo11', 'Tipo12', 'Tipo13', 'Tipo14', 'Tipo15', 'Tipo16', 'Tipo17', 'Tipo18', 'Tipo19', 'Tipo20'];
+      const collections = ['fire', 'grass', 'poison', 'water', 'bug', 'flying', 'normal', 'fighting', 'ground', 'rock', 'ghost', 'steel', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy', 'unknown', 'shadow'];
       for (const collection of collections) {
         const typeDocRef = doc(this.db, 'PokeApi', collection);
-        await setDoc(typeDocRef, { [collection.toLowerCase()]: false });
+        await setDoc(typeDocRef, { encender: false });
       }
     } catch (error) {
       console.log(error);
@@ -67,12 +67,27 @@ export class HomePage {
 
   async tipo(types: string[]) {
     try {
+      // Apagar todos los LED antes de encender el correspondiente
+      await this.apagarTodosLosLeds();
+
       for (const type of types) {
-        const typeCollection = 'Tipo' + this.getTypeIndex(type);
+        const typeCollection = this.getTypeIndex(type);
         // Cambiar el estado del LED
         // Enviar el estado del LED a Firebase
         const typeDocRef = doc(this.db, 'PokeApi', typeCollection);
-        await setDoc(typeDocRef, { [type.toLowerCase()]: true });
+        await setDoc(typeDocRef, { encender: true });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async apagarTodosLosLeds() {
+    try {
+      const collections = ['fire', 'grass', 'poison', 'water', 'bug', 'flying', 'normal', 'fighting', 'ground', 'rock', 'ghost', 'steel', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy', 'unknown', 'shadow'];
+      for (const collection of collections) {
+        const typeDocRef = doc(this.db, 'PokeApi', collection);
+        await setDoc(typeDocRef, { encender: false });
       }
     } catch (error) {
       console.log(error);
@@ -81,26 +96,26 @@ export class HomePage {
 
   getTypeIndex(type: string): string {
     switch (type) {
-      case 'fire': return '1';
-      case 'grass': return '2';
-      case 'poison': return '3';
-      case 'water': return '4';
-      case 'bug': return '5';
-      case 'flying': return '6';
-      case 'normal': return '7';
-      case 'fighting': return '8';
-      case 'ground': return '9';
-      case 'rock': return '10';
-      case 'ghost': return '11';
-      case 'steel': return '12';
-      case 'electric': return '13';
-      case 'psychic': return '14';
-      case 'ice': return '15';
-      case 'dragon': return '16';
-      case 'dark': return '17';
-      case 'fairy': return '18';
-      case 'unknown': return '19';
-      case 'shadow': return '20';
+      case 'fire': return 'fire';
+      case 'grass': return 'grass';
+      case 'poison': return 'poison';
+      case 'water': return 'water';
+      case 'bug': return 'bug';
+      case 'flying': return 'flying';
+      case 'normal': return 'normal';
+      case 'fighting': return 'fighting';
+      case 'ground': return 'ground';
+      case 'rock': return 'rock';
+      case 'ghost': return 'ghost';
+      case 'steel': return 'steel';
+      case 'electric': return 'electric';
+      case 'psychic': return 'psychic';
+      case 'ice': return 'ice';
+      case 'dragon': return 'dragon';
+      case 'dark': return 'dark';
+      case 'fairy': return 'fairy';
+      case 'unknown': return 'unknown';
+      case 'shadow': return 'shadow';
       default: return '21'; // Tipo desconocido
     }
   }
